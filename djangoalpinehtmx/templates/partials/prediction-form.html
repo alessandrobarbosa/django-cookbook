@@ -1,0 +1,31 @@
+{# The trigger implemented here is a kind of hack to submit forms without declaring submit input type #}
+{# inside the form. The notation used on button id assure that each item on our list has a unique id. #}
+
+<form
+    style="display: inline"
+    hx-trigger="click from:#predict-fixture-{{ fixture.pk }}"
+    hx-post="{% url 'submit-prediction' fixture.pk %}"
+    hx-target="closest .prediction-container"
+    hx-swap="outerHTML">
+
+    <input
+        name="home_goals"
+        type="number"
+        min="0"
+        max="30"
+        class="prediction-input"
+        value="{{ prediction.home_goals }}"
+        @keyup="submittable = $el.value.length && $el.nextElementSibling.value.length"
+        @change="submittable = $el.value.length && $el.nextElementSibling.value.length"
+        required>
+    <input
+        name="away_goals"
+        type="number"
+        min="0"
+        max="30"
+        class="prediction-input"
+        value="{{ prediction.away_goals }}"
+        @keyup="submittable = $el.value.length && $el.previousElementSibling.value.length"
+        @change="submittable = $el.value.length && $el.previousElementSibling.value.length"
+        required>
+</form>
